@@ -1,5 +1,7 @@
 import 'package:fitness_pulse/app/dependencies.dart';
+import 'package:fitness_pulse/features/ai/presentation/pages/ai_page.dart';
 import 'package:flutter/material.dart';
+
 import '../../../dashboard/presentation/pages/dashboard_page.dart';
 import '../../../progress/presentation/pages/progress_page.dart';
 
@@ -13,62 +15,81 @@ class HomeShell extends StatefulWidget {
 class _HomeShellState extends State<HomeShell> {
   int _currentIndex = 0;
 
-  final List<Widget> _pages = const [
-    DashboardPage(),
-    Center(child: Text('AI help')),
-    ProgressPage()
-  ];
+  late final List<Widget> _pages;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _pages = [
+      const DashboardPage(),
+
+      AIPage(
+        onWorkoutsAdded: () {
+          setState(() {
+            _currentIndex = 0;
+          });
+        },
+      ),
+
+      const ProgressPage(),
+    ];
+  }
 
   Future<void> _logout() async {
     await AppDependencies.authController.logout();
   }
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Row(
-          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Icon(Icons.fitness_center, color: Colors.blue),
+            Icon(
+              Icons.fitness_center,
+              color: Colors.blue,
+            ),
             SizedBox(width: 10),
             Text('Fitness Pulse'),
           ],
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.logout_outlined),
-            tooltip: 'logout',
+            icon: const Icon(Icons.logout_outlined),
+            tooltip: 'Logout',
             onPressed: _logout,
-          )
+          ),
         ],
       ),
+
       body: _pages[_currentIndex],
+
       bottomNavigationBar: NavigationBar(
         selectedIndex: _currentIndex,
-        onDestinationSelected: (index){
+        onDestinationSelected: (index) {
           setState(() {
             _currentIndex = index;
           });
         },
-        destinations: [
+        destinations: const [
           NavigationDestination(
-            icon: Icon(Icons.fitness_center_outlined), 
+            icon: Icon(Icons.fitness_center_outlined),
             selectedIcon: Icon(Icons.fitness_center),
-            label: 'Main'
+            label: 'Main',
           ),
           NavigationDestination(
-            icon: Icon(Icons.psychology_outlined), 
+            icon: Icon(Icons.psychology_outlined),
             selectedIcon: Icon(Icons.psychology),
-            label: 'AI help'
+            label: 'AI Help',
           ),
           NavigationDestination(
-            icon: Icon(Icons.show_chart_outlined), 
+            icon: Icon(Icons.show_chart_outlined),
             selectedIcon: Icon(Icons.show_chart),
-            label: 'Progress'
-          )
-        ]
-      )
+            label: 'Progress',
+          ),
+        ],
+      ),
     );
   }
 }

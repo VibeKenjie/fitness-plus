@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../domain/entities/workout.dart';
 
 class WorkoutModel extends WorkoutEntity {
@@ -19,7 +20,7 @@ class WorkoutModel extends WorkoutEntity {
       repetition: data['repetition'], 
       sets: data['sets'], 
       isFinished: data['is_finished'],
-      createdAt: data['created_at']
+      createdAt: (data['created_at'] as Timestamp).toDate()
     );
   }
 
@@ -29,7 +30,8 @@ class WorkoutModel extends WorkoutEntity {
       'name': name,
       'repetition': repetition,
       'sets': sets,
-      'is_finished': isFinished
+      'is_finished': isFinished,
+      'created_at': Timestamp.fromDate(createdAt)
     };
   }
 }

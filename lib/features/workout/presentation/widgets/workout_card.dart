@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../../domain/entities/workout.dart';
 
 class WorkoutCard extends StatelessWidget {
   final WorkoutEntity workout;
-  final VoidCallback onEdit;
-  final VoidCallback onDelete;
-  final ValueChanged<bool> onStatusChanged;
+  final VoidCallback? onEdit;
+  final VoidCallback? onDelete;
+  final ValueChanged<bool>? onStatusChanged;
 
   const WorkoutCard({
     super.key,
     required this.workout,
-    required this.onEdit,
-    required this.onDelete,
-    required this.onStatusChanged
+    this.onEdit,
+    this.onDelete,
+    this.onStatusChanged
   });
 
   @override
   Widget build(BuildContext context) {
+    final formattedDate = DateFormat('MM dd, yyyy EEE').format(workout.createdAt);
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(20),
@@ -37,16 +39,28 @@ class WorkoutCard extends StatelessWidget {
               ),
               const SizedBox(width: 14),
               Expanded(
-                child: Text(
-                  workout.name,
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                child: Column (
+                  children: [
+                    Text(
+                      workout.name,
+                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 5),
+                    Text (
+                      formattedDate,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey
+                      ),
+                    ),
+                  ],
                 )
               ),
               Checkbox(
                 value: workout.isFinished, 
-                onChanged: (value){
-                  if (value != null){
-                    onStatusChanged(value);
+                onChanged: onStatusChanged == null ? null : (value) => {
+                  if(value != null){
+                    onStatusChanged!(value)
                   }
                 }
               )
@@ -65,21 +79,23 @@ class WorkoutCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              IconButton(
-                onPressed: onEdit, 
-                icon: const Icon(Icons.edit),
-                tooltip: 'Edit',
-              ),
-              IconButton(
-                onPressed: onDelete, 
-                icon: const Icon(Icons.delete, color: Colors.red),
-                tooltip: 'Delete',
-              )
-            ],
-          )
+          if(!workout.isFinished && (onEdit != null && onDelete != null))...[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                IconButton(
+                  onPressed: onEdit, 
+                  icon: const Icon(Icons.edit),
+                  tooltip: 'Edit',
+                ),
+                IconButton(
+                  onPressed: onDelete, 
+                  icon: const Icon(Icons.delete, color: Colors.red),
+                  tooltip: 'Delete',
+                )
+              ],
+            )
+          ],
         ],
       )
     );

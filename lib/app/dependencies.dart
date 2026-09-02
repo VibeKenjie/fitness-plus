@@ -1,5 +1,3 @@
-import 'package:fitness_pulse/features/workout/presentation/controllers/workout_controller.dart';
-
 import '../features/auth/data/data_sources/auth_remote_datasource.dart';
 import '../features/auth/data/repositories/auth_repository_impl.dart';
 import '../features/auth/domain/usecases/login.dart';
@@ -15,6 +13,10 @@ import '../features/workout/domain/usecases/get_workout.dart';
 import '../features/workout/domain/usecases/update_workout.dart';
 import '../features/workout/domain/usecases/update_workout_status.dart';
 import '../features/workout/domain/usecases/delete_workout.dart';
+import '../features/workout/presentation/controllers/workout_controller.dart';
+
+import '../features/ai/domain/usecases/generate_workout.dart';
+import '../features/ai/presentation/controllers/ai_controller.dart';
 
 class AppDependencies {
   static final authRemoteDataSource = AuthRemoteDataSource();
@@ -47,5 +49,11 @@ class AppDependencies {
     updateWokoutUseCase: updateWorkout, 
     updateWorkoutStatusUseCase: updateWorkoutStatus, 
     deleteWorkoutUseCase: deleteWorkout
+  );
+
+  static final generateWorkout = GenerateWorkout();
+
+  static final aiController = AIController (
+    generateWorkoutUseCase: generateWorkout
   );
 }

@@ -86,7 +86,7 @@ class _WorkoutFormDialogState extends State<WorkoutFormDialog> {
       );
     }
 
-    if(!context.mounted) return;
+    if(!mounted) return;
 
     if(success){
       Navigator.pop(context);
@@ -109,7 +109,7 @@ class _WorkoutFormDialogState extends State<WorkoutFormDialog> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 DropdownButtonFormField<String>(
-                  value: _selectedWorkout,
+                  initialValue: _selectedWorkout,
                   decoration: const InputDecoration(
                     labelText: 'Workout Name',
                     border: OutlineInputBorder(),

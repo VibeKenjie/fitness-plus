@@ -2,7 +2,6 @@ import 'package:fitness_pulse/app/dependencies.dart';
 import 'package:fitness_pulse/features/workout/presentation/widgets/workout_form_dialog.dart';
 import 'package:fitness_pulse/features/workout/presentation/widgets/workout_card.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -164,9 +163,9 @@ class _DashboardPageState extends State<DashboardPage> {
                             )
                           );
                         }
+
                         return Column(
-                          children: workoutController.workouts.map((workout) {
-                            final formattedDate = DateFormat('MM dd, yyyy EEE').format(workout.createdAt);
+                          children: workoutController.workouts.where((workout) => !workout.isFinished).map((workout) {
                             return WorkoutCard(
                               workout: workout,
                               onEdit: () {
@@ -176,8 +175,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                     return WorkoutFormDialog(workout: workout);
                                   }
                                 );
-                              },
-                              onDelete: () {
+                              }, onDelete: () {
                                 _deleteWorkout(workout.id);
                               },
                               onStatusChanged: (value){

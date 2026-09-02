@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../../domain/entities/workout.dart';
 import '../../domain/repositories/workout_repository.dart';
 import '../data_sources/workout_remote_datasource.dart';
@@ -14,7 +16,7 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
     required String userId,
     required String name,
     required int repetition,
-    required int sets
+    required int sets,
   }) async {
     final document = await remoteDatasource.createWorkout(
       userId: userId, 
@@ -23,13 +25,22 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
       sets: sets
     );
 
+    final snapshot = await document.get();
+
+    if(!snapshot.exists || snapshot.data() == null) {
+      throw Exception('Failed to retrieve created workout.');
+    }
+
+    final data = snapshot.data()!;
+
     return WorkoutModel(
       id: document.id,
       userId: userId,
       name: name,
       repetition: repetition,
       sets: sets,
-      isFinished: false
+      isFinished: false,
+      createdAt: (data['created_at'] as Timestamp).toDate()
     );
   }
 

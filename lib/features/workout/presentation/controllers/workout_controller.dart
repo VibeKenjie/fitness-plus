@@ -103,7 +103,8 @@ class WorkoutController extends ChangeNotifier {
           name: name, 
           repetition: repetition, 
           sets: sets, 
-          isFinished: oldWorkout.isFinished
+          isFinished: oldWorkout.isFinished,
+          createdAt: oldWorkout.createdAt
         );
       }
 
@@ -138,7 +139,8 @@ class WorkoutController extends ChangeNotifier {
           name: oldWorkout.name, 
           repetition: oldWorkout.repetition, 
           sets: oldWorkout.sets, 
-          isFinished: isFinished
+          isFinished: isFinished,
+          createdAt: oldWorkout.createdAt
         );
         
       }
