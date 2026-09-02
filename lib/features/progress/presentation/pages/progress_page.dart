@@ -1,0 +1,17 @@
+import 'package:fitness_pulse/app/dependencies.dart';
+import 'package:flutter/material.dart';
+
+class ProgressPage extends StatefulWidget {
+  const ProgressPage({super.key});
+
+  @override
+  State<ProgressPage> createState() => _ProgressPageState();
+}
+
+class _ProgressPageState extends State<ProgressPage> {
+  @override
+  Widget build(BuildContext context){
+    final controller = AppDependencies.authController;
+    return Scaffold();
+  }
+}
